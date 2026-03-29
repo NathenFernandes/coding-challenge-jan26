@@ -1,3 +1,77 @@
+# Clementine
+
+AI fruit matchmaker built for Clera's coding challenge.
+
+## Running The Full App
+
+Reviewers should check out the top stack branch, `clementine-dashboard`, to run the complete end-to-end app.
+
+### Prerequisites
+
+- Docker Desktop running
+- `pnpm`
+- env vars in `frontend/.env.local`
+
+Required env vars:
+
+- `AI_GATEWAY_API_KEY`
+- `TRIGGER_PROJECT_ID`
+- `TRIGGER_SECRET_KEY`
+
+### Start Locally
+
+From the repo root:
+
+```bash
+pnpm run dev:all
+```
+
+That command starts SurrealDB, Supabase local, the Edge Functions server, the Next.js app, and the Trigger.dev worker.
+
+If you prefer to start services manually, run these in separate terminals:
+
+```bash
+docker rm -f cleara-surrealdb >/dev/null 2>&1 || true
+mkdir -p .surreal-data
+docker run -d --name cleara-surrealdb -p 8000:8000 -v "$PWD/.surreal-data:/data" surrealdb/surrealdb:v2.3.10 start --log info --user root --pass root rocksdb:/data/cleara.db
+```
+
+```bash
+pnpm dlx supabase@latest start
+```
+
+```bash
+pnpm dlx supabase@latest functions serve --no-verify-jwt
+```
+
+```bash
+cd frontend
+pnpm dev
+```
+
+```bash
+cd frontend
+set -a && source .env.local && set +a && pnpm trigger:dev
+```
+
+Then open:
+
+- `http://localhost:3000`
+
+### What Should Be Running
+
+- Next.js frontend on `localhost:3000`
+- SurrealDB on `127.0.0.1:8000`
+- Supabase functions on `127.0.0.1:54321`
+- Trigger.dev local worker from `frontend`
+
+### Shutdown
+
+```bash
+docker rm -f cleara-surrealdb
+pnpm dlx supabase@latest stop
+```
+
 # Coding Challenge - Matchmaking System
 
 ## Introduction
