@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 
 // =============================================================================
-// ⚠️  DISCLAIMER
+// DISCLAIMER
 // =============================================================================
 // This store structure is just a STARTING POINT. Feel free to:
 // - Completely redesign the state shape
@@ -64,18 +64,13 @@ export interface ConversationMessage {
 // =============================================================================
 
 interface MatchmakingState {
-  // Data
   apples: Apple[];
   oranges: Orange[];
   matches: Match[];
   conversations: Conversation[];
-
-  // UI State
   activeConversationId: string | null;
   isLoading: boolean;
   error: string | null;
-
-  // Actions
   setApples: (apples: Apple[]) => void;
   setOranges: (oranges: Orange[]) => void;
   addMatch: (match: Match) => void;
@@ -83,7 +78,7 @@ interface MatchmakingState {
   addConversation: (conversation: Conversation) => void;
   addMessageToConversation: (
     conversationId: string,
-    message: ConversationMessage
+    message: ConversationMessage,
   ) => void;
   setLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
@@ -147,22 +142,20 @@ export const useMatchmakingStore = create<MatchmakingState>()(
       }),
       {
         name: "matchmaking-storage",
-        // Only persist specific fields
         partialize: (state) => ({
           conversations: state.conversations,
           matches: state.matches,
         }),
-      }
+      },
     ),
-    { name: "MatchmakingStore" }
-  )
+    { name: "MatchmakingStore" },
+  ),
 );
 
 // =============================================================================
 // SELECTORS
 // =============================================================================
 
-// Example selectors for computed values
 export const selectActiveConversation = (state: MatchmakingState) =>
   state.conversations.find((c) => c.id === state.activeConversationId);
 
@@ -175,4 +168,3 @@ export const selectSuccessRate = (state: MatchmakingState) => {
     ? Math.round((confirmed / state.matches.length) * 100)
     : 0;
 };
-
