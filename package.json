@@ -4,13 +4,14 @@
   "private": true,
   "description": "Matchmaking system - apples and oranges",
   "scripts": {
-    "supabase": "supabase",
-    "supabase:start": "supabase start",
-    "supabase:stop": "supabase stop",
-    "supabase:functions:serve": "supabase functions serve"
+    "supabase": "pnpm dlx supabase@latest",
+    "supabase:start": "pnpm dlx supabase@latest start",
+    "supabase:stop": "pnpm dlx supabase@latest stop",
+    "supabase:functions:serve": "pnpm dlx supabase@latest functions serve",
+    "trigger:dev": "pnpm --dir frontend trigger:dev",
+    "trigger:deploy": "pnpm --dir frontend trigger:deploy"
   },
   "devDependencies": {
     "supabase": "^2.23.4"
   }
 }
-
