@@ -1,295 +1,231 @@
-import { Suspense } from "react";
+import Link from "next/link";
 import { getDashboardData } from "./loader";
+import Markdown from "react-markdown";
 
-// =============================================================================
-// ⚠️  DISCLAIMER
-// =============================================================================
-// This dashboard is SCAFFOLDING ONLY. Feel free to:
-// - Completely redesign the layout and components
-// - Remove any sections that don't fit your vision
-// - Add entirely new metrics and visualizations
-// - Change the styling, colors, and theme
-//
-// BE CREATIVE! This is just a starting point to get you going.
-// =============================================================================
+export const dynamic = "force-dynamic";
 
-// =============================================================================
-// TYPES
-// =============================================================================
-
-// These are example types - define your own based on your solution!
-export interface MatchMetrics {
-  totalApples: number;
-  totalOranges: number;
-  totalMatches: number;
-  successRate: number;
+function MetricCard({
+  title,
+  value,
+  description,
+}: {
+  title: string;
+  value: string | number;
+  description: string;
+}) {
+  return (
+    <div className="rounded-[24px] border border-zinc-200/80 bg-white p-5 shadow-[0_22px_70px_-48px_rgba(15,23,42,0.45)]">
+      <p className="text-xs font-mono uppercase tracking-[0.28em] text-zinc-500">
+        {title}
+      </p>
+      <p className="mt-3 text-4xl font-semibold tracking-tight text-zinc-950">
+        {value}
+      </p>
+      <p className="mt-2 text-sm leading-6 text-zinc-600">{description}</p>
+    </div>
+  );
 }
 
-// =============================================================================
-// SERVER DATA LOADING
-// =============================================================================
-
-async function DashboardContent() {
+export default async function DashboardPage() {
   const data = await getDashboardData();
 
   return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-      {/* 
-        ⚠️ EXAMPLE METRICS - Replace with your own!
-        Think about what metrics actually demonstrate your system is working well.
-        These are just placeholders to show the pattern.
-      */}
-      <MetricCard
-        title="Total Apples"
-        value={data.metrics.totalApples}
-        icon="🍎"
-        description="Apples in the system"
-      />
-      <MetricCard
-        title="Total Oranges"
-        value={data.metrics.totalOranges}
-        icon="🍊"
-        description="Oranges in the system"
-      />
-      <MetricCard
-        title="Total Matches"
-        value={data.metrics.totalMatches}
-        icon="🍐"
-        description="Successful pear-ings"
-      />
-      <MetricCard
-        title="Success Rate"
-        value={`${data.metrics.successRate}%`}
-        icon="📊"
-        description="Match success rate"
-      />
-    </div>
-  );
-}
-
-// =============================================================================
-// COMPONENTS
-// =============================================================================
-
-// ⚠️ These components are examples - build your own or modify as needed!
-
-interface MetricCardProps {
-  title: string;
-  value: string | number;
-  icon: string;
-  description: string;
-}
-
-function MetricCard({ title, value, icon, description }: MetricCardProps) {
-  return (
-    <div className="metric-card">
-      <div className="flex items-center justify-between">
-        <span className="text-2xl">{icon}</span>
-        <span className="text-xs uppercase tracking-wide text-muted">
-          {title}
-        </span>
-      </div>
-      <div className="mt-4">
-        <p className="text-3xl font-bold">{value}</p>
-        <p className="mt-1 text-sm text-muted">{description}</p>
-      </div>
-    </div>
-  );
-}
-
-function MetricCardSkeleton() {
-  return (
-    <div className="metric-card animate-pulse">
-      <div className="flex items-center justify-between">
-        <div className="h-8 w-8 rounded bg-zinc-200 dark:bg-zinc-700" />
-        <div className="h-4 w-20 rounded bg-zinc-200 dark:bg-zinc-700" />
-      </div>
-      <div className="mt-4">
-        <div className="h-8 w-24 rounded bg-zinc-200 dark:bg-zinc-700" />
-        <div className="mt-2 h-4 w-32 rounded bg-zinc-200 dark:bg-zinc-700" />
-      </div>
-    </div>
-  );
-}
-
-function DashboardSkeleton() {
-  return (
-    <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-      {Array.from({ length: 4 }).map((_, i) => (
-        <MetricCardSkeleton key={i} />
-      ))}
-    </div>
-  );
-}
-
-/**
- * A helper component to display scaffold notes in the UI.
- * Remove this component entirely when building your solution!
- */
-function ScaffoldNote({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="mb-4 rounded-lg border border-dashed border-amber-400/50 bg-amber-50/50 px-4 py-3 text-sm text-amber-700 dark:border-amber-500/30 dark:bg-amber-950/20 dark:text-amber-400">
-      <span className="mr-2">💡</span>
-      {children}
-    </div>
-  );
-}
-
-// =============================================================================
-// PAGE
-// =============================================================================
-
-export default function DashboardPage() {
-  return (
-    <div className="min-h-screen">
-      {/* Header - Feel free to redesign! */}
-      <header className="border-b border-zinc-200 bg-white/80 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/80">
-        <div className="mx-auto max-w-7xl px-6 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight">
-                🍎 Matchmaking Dashboard 🍊
-              </h1>
-              <p className="mt-1 text-sm text-muted">
-                Creating perfect pears, one match at a time
-              </p>
-            </div>
-            <div className="flex items-center gap-4">
-              <button className="btn-primary">New Conversation</button>
-            </div>
+    <main className="min-h-screen bg-[linear-gradient(180deg,_#fffdf7,_#fff7ed_45%,_#ffffff)] px-4 py-8 md:px-8">
+      <div className="mx-auto max-w-7xl space-y-8">
+        <header className="flex flex-col gap-4 rounded-[30px] border border-zinc-200/80 bg-white/90 p-6 shadow-[0_30px_90px_-55px_rgba(15,23,42,0.35)] md:flex-row md:items-end md:justify-between">
+          <div>
+            <p className="text-xs font-mono uppercase tracking-[0.32em] text-orange-500">
+              Orchard metrics
+            </p>
+            <h1 className="mt-3 text-4xl font-semibold tracking-tight text-zinc-950 md:text-5xl">
+              Match quality, market pressure, and recent runs.
+            </h1>
+            <p className="mt-3 max-w-2xl text-base leading-7 text-zinc-600">
+              This dashboard reads directly from SurrealDB-backed fruit records
+              and stored match runs. It is built to show whether Clementine is
+              finding strong mutual fits rather than one-sided near misses.
+            </p>
           </div>
-        </div>
-      </header>
+          <Link className="btn-secondary self-start md:self-auto" href="/">
+            Back to Clementine
+          </Link>
+        </header>
 
-      {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-6 py-8">
-        {/* Metrics Section */}
-        <section className="mb-8">
-          <h2 className="mb-4 text-lg font-semibold">Overview Metrics</h2>
-          <ScaffoldNote>
-            <strong>This entire section is just an example!</strong> Think about
-            what metrics actually prove your matchmaking system works well.
-            Quality over quantity - pick metrics that tell a compelling story.
-          </ScaffoldNote>
-          <Suspense fallback={<DashboardSkeleton />}>
-            <DashboardContent />
-          </Suspense>
+        <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <MetricCard
+            description="All apples currently loaded into the orchard."
+            title="Total apples"
+            value={data.metrics.totalApples}
+          />
+          <MetricCard
+            description="All oranges currently available for reciprocal matching."
+            title="Total oranges"
+            value={data.metrics.totalOranges}
+          />
+          <MetricCard
+            description="Generated fruit profiles created through the active onboarding flow."
+            title="Generated profiles"
+            value={data.metrics.generatedProfiles}
+          />
+          <MetricCard
+            description="Stored ranking runs performed by Clementine."
+            title="Match runs"
+            value={data.metrics.totalMatchRuns}
+          />
+          <MetricCard
+            description="Share of stored runs whose top candidate cleared the strong-match threshold."
+            title="Strong match rate"
+            value={`${data.metrics.strongMatchRate}%`}
+          />
+          <MetricCard
+            description="Average mutual score of the top candidate across recent runs."
+            title="Avg. mutual score"
+            value={`${data.metrics.averageMutualScore}%`}
+          />
         </section>
 
-        {/* Visualization Section */}
-        <section className="mb-8">
-          <h2 className="mb-4 text-lg font-semibold">
-            Matchmaking Visualization
-          </h2>
-          <ScaffoldNote>
-            <strong>Build whatever visualization makes sense for your solution!</strong>{" "}
-            This could be a chat interface, a network graph, a timeline, an
-            animation - get creative and show off your approach.
-          </ScaffoldNote>
-          <div className="card min-h-[400px]">
-            <div className="flex h-full items-center justify-center text-muted">
-              <div className="text-center">
-                <p className="text-4xl">🎯</p>
-                <p className="mt-4 text-lg font-medium">Visualization Area</p>
-                <p className="mt-2 max-w-md text-sm">
-                  Replace this with your own visualization. The README mentions
-                  &quot;you may choose the medium&quot; - so be creative!
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Recent Matches Section */}
-        <section className="mb-8">
-          <h2 className="mb-4 text-lg font-semibold">Recent Matches</h2>
-          <ScaffoldNote>
-            <strong>A table might not be the best way to show matches.</strong>{" "}
-            Consider cards, a feed, or something more visual. You decide what
-            data to show and how to present it.
-          </ScaffoldNote>
-          <div className="card">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
-                  <tr className="border-b border-zinc-200 dark:border-zinc-700">
-                    <th className="px-4 py-3 text-left text-sm font-medium text-muted">
-                      Apple
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-muted">
-                      Orange
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-muted">
-                      Match Score
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-muted">
-                      Status
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-medium text-muted">
-                      Created At
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td
-                      colSpan={5}
-                      className="px-4 py-8 text-center text-sm text-muted"
-                    >
-                      No matches yet. Start a new conversation to create your
-                      first pear! 🍐
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        {/* Analytics Section */}
-        <section>
-          <h2 className="mb-4 text-lg font-semibold">Analytics</h2>
-          <ScaffoldNote>
-            <strong>
-              These chart placeholders are arbitrary examples - don&apos;t feel bound
-              to them!
-            </strong>{" "}
-            Design analytics that demonstrate YOUR system&apos;s performance. What
-            metrics convince YOU that the matchmaking is working well?
-          </ScaffoldNote>
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <div className="card min-h-[300px]">
-              <h3 className="mb-4 font-medium text-muted">
-                Example: Match Quality Distribution
-              </h3>
-              <div className="flex h-full items-center justify-center text-muted">
-                <p className="text-sm">
-                  Replace with your own analytics component
-                </p>
-              </div>
-            </div>
-            <div className="card min-h-[300px]">
-              <h3 className="mb-4 font-medium text-muted">
-                Example: Matches Over Time
-              </h3>
-              <div className="flex h-full items-center justify-center text-muted">
-                <p className="text-sm">
-                  Replace with your own analytics component
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Footer Note */}
-        <footer className="mt-12 rounded-lg border border-dashed border-zinc-300 bg-zinc-50 px-6 py-4 text-center text-sm text-muted dark:border-zinc-700 dark:bg-zinc-900">
-          <p className="font-medium">🚀 This entire dashboard is just scaffolding!</p>
-          <p className="mt-1">
-            Feel free to completely redesign, restructure, or rebuild from
-            scratch.
+        <section className="rounded-[28px] border border-zinc-200/80 bg-white p-6 shadow-[0_24px_70px_-48px_rgba(15,23,42,0.45)]">
+          <p className="text-xs font-mono uppercase tracking-[0.28em] text-sky-600">
+            Trigger queues
           </p>
-        </footer>
-      </main>
-    </div>
+          <h2 className="mt-3 text-2xl font-semibold tracking-tight text-zinc-950">
+            Background work in flight
+          </h2>
+
+          <div className="mt-6 grid gap-4 md:grid-cols-2">
+            {data.triggerQueues.length > 0 ? data.triggerQueues.map((queue) => (
+              <article
+                className="rounded-[24px] border border-sky-100 bg-sky-50/60 p-5"
+                key={queue.name}
+              >
+                <p className="text-sm font-semibold text-zinc-900">{queue.name}</p>
+                <div className="mt-4 grid grid-cols-2 gap-3 text-sm text-zinc-700">
+                  <div>
+                    <p className="text-zinc-500">Running</p>
+                    <p className="mt-1 text-xl font-semibold text-zinc-950">{queue.running}</p>
+                  </div>
+                  <div>
+                    <p className="text-zinc-500">Queued</p>
+                    <p className="mt-1 text-xl font-semibold text-zinc-950">{queue.queued}</p>
+                  </div>
+                  <div>
+                    <p className="text-zinc-500">Concurrency</p>
+                    <p className="mt-1 text-xl font-semibold text-zinc-950">
+                      {queue.currentConcurrency ?? queue.concurrencyLimit ?? "auto"}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-zinc-500">Status</p>
+                    <p className="mt-1 text-xl font-semibold text-zinc-950">
+                      {queue.paused ? "Paused" : "Active"}
+                    </p>
+                  </div>
+                </div>
+              </article>
+            )) : (
+              <p className="text-sm leading-7 text-zinc-600">
+                Trigger.dev queue stats will appear here once `TRIGGER_SECRET_KEY`
+                and `TRIGGER_PROJECT_ID` are configured and the Trigger worker is
+                running.
+              </p>
+            )}
+          </div>
+        </section>
+
+        <section className="grid gap-6 lg:grid-cols-[0.8fr_1.2fr]">
+          <div className="rounded-[28px] border border-zinc-200/80 bg-white p-6 shadow-[0_24px_70px_-48px_rgba(15,23,42,0.45)]">
+            <p className="text-xs font-mono uppercase tracking-[0.28em] text-lime-600">
+              Common blockers
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-zinc-950">
+              Where top matches still struggle
+            </h2>
+
+            <div className="mt-6 space-y-3">
+              {data.blockerCounts.length > 0 ? data.blockerCounts.map((item) => (
+                <div
+                  className="rounded-[22px] border border-zinc-100 bg-zinc-50 px-4 py-4"
+                  key={item.label}
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <p className="text-sm leading-6 text-zinc-700">{item.label}</p>
+                    <span className="rounded-full bg-zinc-950 px-3 py-1 text-xs font-medium text-white">
+                      {item.count}
+                    </span>
+                  </div>
+                </div>
+              )) : (
+                <p className="text-sm leading-7 text-zinc-600">
+                  Once a few searches run through the system, Clementine will
+                  surface the most common reasons otherwise-good matches fall
+                  short.
+                </p>
+              )}
+            </div>
+          </div>
+
+          <div className="rounded-[28px] border border-zinc-200/80 bg-white p-6 shadow-[0_24px_70px_-48px_rgba(15,23,42,0.45)]">
+            <p className="text-xs font-mono uppercase tracking-[0.28em] text-orange-500">
+              Recent runs
+            </p>
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-zinc-950">
+              Latest orchard searches
+            </h2>
+
+            <div className="mt-6 space-y-4">
+              {data.recentMatches.length > 0 ? data.recentMatches.map((match) => {
+                const top = match.topMatches[0];
+                return (
+                  <article
+                    className="rounded-[24px] border border-orange-100 bg-orange-50/55 p-5"
+                    key={match.id}
+                  >
+                    <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                      <div>
+                        <p className="text-sm font-semibold text-zinc-900">
+                          {top
+                            ? `${Math.round(top.mutualScore * 100)}% mutual fit`
+                            : "No candidate stored"}
+                        </p>
+                        <p className="mt-1 text-sm text-zinc-600">
+                          Outcome: {match.outcome.replaceAll("_", " ")}
+                        </p>
+                      </div>
+                      <div className="text-sm text-zinc-500">
+                        {new Date(match.createdAt).toLocaleString()}
+                      </div>
+                    </div>
+
+                    {match.narrative ? (
+                      <div className="mt-4 text-sm leading-7 text-zinc-700 prose-sm max-w-none prose-zinc">
+                        <Markdown>{match.narrative}</Markdown>
+                      </div>
+                    ) : null}
+
+                    {top?.highlights.length ? (
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {top.highlights.slice(0, 3).map((highlight) => (
+                          <span
+                            className="rounded-full border border-orange-200 bg-white px-3 py-2 text-xs text-zinc-700"
+                            key={highlight}
+                          >
+                            {highlight}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
+                  </article>
+                );
+              }) : (
+                <p className="text-sm leading-7 text-zinc-600">
+                  No match runs are stored yet. Start a conversation on the main
+                  page to generate a profile and search the orchard.
+                </p>
+              )}
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
   );
 }
