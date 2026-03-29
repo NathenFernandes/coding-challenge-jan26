@@ -20,7 +20,15 @@ Required env vars:
 
 ### Start Locally
 
-Run each of these in a separate terminal from the repo root unless noted otherwise:
+From the repo root:
+
+```bash
+pnpm run dev:all
+```
+
+That command starts SurrealDB, Supabase local, the Edge Functions server, the Next.js app, and the Trigger.dev worker.
+
+If you prefer to start services manually, run these in separate terminals:
 
 ```bash
 docker rm -f cleara-surrealdb >/dev/null 2>&1 || true

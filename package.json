@@ -4,6 +4,7 @@
   "private": true,
   "description": "Matchmaking system - apples and oranges",
   "scripts": {
+    "dev:all": "bash ./scripts/dev-all.sh",
     "supabase": "pnpm dlx supabase@latest",
     "supabase:start": "pnpm dlx supabase@latest start",
     "supabase:stop": "pnpm dlx supabase@latest stop",
