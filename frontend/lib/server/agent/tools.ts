@@ -42,7 +42,6 @@ export function createAgentTools({ sessionId, turnId, lastUserMessage }: AgentTo
         const profile = await requireActiveProfile(sessionId);
         return {
           profile,
-          nextStep: "ask_what_they_are_looking_for",
         };
       },
     }),
@@ -64,7 +63,6 @@ export function createAgentTools({ sessionId, turnId, lastUserMessage }: AgentTo
 
         return {
           profile,
-          nextStep: "confirm_profile_update",
         };
       },
     }),
@@ -96,7 +94,6 @@ export function createAgentTools({ sessionId, turnId, lastUserMessage }: AgentTo
 
         return {
           profile,
-          nextStep: "confirm_preferences_or_match",
         };
       },
     }),
@@ -186,9 +183,8 @@ export function createAgentTools({ sessionId, turnId, lastUserMessage }: AgentTo
             highlights: m.highlights,
             blockers: m.blockers,
             requesterBreakdown: m.breakdown.requester,
-            candidateBreakdown: m.breakdown.candidate,
-          })),
-          nextStep: "present_matches",
+              candidateBreakdown: m.breakdown.candidate,
+            })),
         };
       },
     }),
