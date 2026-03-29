@@ -5,6 +5,8 @@
    ============================================================================= */
 
 :root {
+  --font-sans: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+  --font-mono: "SFMono-Regular", "JetBrains Mono", "Menlo", monospace;
   /* Colors - Light Mode */
   --color-background: #fafafa;
   --color-foreground: #0a0a0a;
@@ -207,6 +209,21 @@ body {
 
 .animate-pulse-subtle {
   animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+@keyframes typing-dot {
+  0%, 60%, 100% {
+    opacity: 0.3;
+    transform: scale(0.85);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-typing-dot {
+  animation: typing-dot 1.2s ease-in-out infinite;
 }
 
 /* =============================================================================
