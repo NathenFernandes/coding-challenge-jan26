@@ -1,6 +1,6 @@
 // Setup type definitions for built-in Supabase Runtime APIs
 import "@supabase/functions-js/edge-runtime.d.ts";
-import { generateApple, communicateAttributes, communicatePreferences } from "../_shared/generateFruit.ts";
+import { buildIncomingFruitPayload } from "../_shared/buildIncomingFruitPayload.ts";
 
 /**
  * Get Incoming Apple Edge Function
@@ -27,13 +27,8 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Step 1: Generate a new apple instance
-    const apple = generateApple();
-
-    // Step 2: Capture the apple's communication
-    // The apple expresses its attributes and preferences
-    const appleAttrs = communicateAttributes(apple);
-    const applePrefs = communicatePreferences(apple);
+    // Step 1 + 2: Generate the new apple and capture its communication
+    const fruit = buildIncomingFruitPayload("apple");
 
     // Step 3: Store the new apple in SurrealDB
     // TODO: Implement apple storage logic
@@ -44,7 +39,7 @@ Deno.serve(async (req) => {
     // Step 5: Communicate matching results via LLM
     // TODO: Implement matching results communication logic
 
-    return new Response(JSON.stringify({ message: "Apple received" }), {
+    return new Response(JSON.stringify({ fruit }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });
